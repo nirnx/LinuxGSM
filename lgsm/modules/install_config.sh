@@ -759,6 +759,52 @@ elif [ "${shortname}" == "ut99" ]; then
 elif [ "${shortname}" == "unt" ]; then
 	# Config is generated on first run
 	:
+elif [ "${shortname}" == "vein" ]; then
+	fn_check_cfgdir
+	echo -e ""
+	echo -e "${bold}${lightyellow}Creating ${gamename} Config${default}"
+	fn_messages_separator
+	if [ ! -f "${servercfgfullpath}" ]; then
+		echo -e "Creating default Game.ini config file."
+		fn_script_log_info "Creating default Game.ini config file."
+		cat > "${servercfgfullpath}" << 'EOF'
+[/Script/Engine.GameSession]
+MaxPlayers=16
+
+[/Script/Vein.VeinGameSession]
+bPublic=True
+ServerName=LinuxGSM
+ServerDescription=A VEIN server powered by LinuxGSM. Change this description in Game.ini
+BindAddr=0.0.0.0
+;SuperAdminSteamIDs=76561198000000000
+;AdminSteamIDs=76561198000000000
+HeartbeatInterval=5.0
+Password=
+
+[OnlineSubsystemSteam]
+GameServerQueryPort=27015
+bVACEnabled=0
+
+[URL]
+Port=7777
+EOF
+		fn_sleep_time
+	fi
+
+	# Create Engine.ini with console variables
+	enginecfgfullpath="${servercfgdir}/Engine.ini"
+	if [ ! -f "${enginecfgfullpath}" ]; then
+		echo -e "Creating default Engine.ini config file."
+		fn_script_log_info "Creating default Engine.ini config file."
+		cat > "${enginecfgfullpath}" << 'EOF'
+[ConsoleVariables]
+;vein.PvP=True
+vein.AISpawner.Enabled=True
+vein.TimeMultiplier=16
+EOF
+		fn_sleep_time
+	fi
+	fn_list_config_locations
 elif [ "${shortname}" == "vints" ]; then
 	# Config is generated on first run
 	:
